@@ -5,4 +5,4 @@ target_include_directories (Mesh PRIVATE ${ASSIMP_INCLUDE_DIR})
 set_target_properties(Mesh PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/Plugins"
 	SUFFIX ".bep")
-target_link_libraries(Mesh PRIVATE UABE_Generic AssetsTools libStringConverter assimp)
+target_link_libraries(Mesh PRIVATE UABE_Generic AssetsTools libStringConverter assimp fmt::fmt)

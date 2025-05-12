@@ -319,3 +319,17 @@ set(ASSIMP_BUILD_3MF_IMPORTER ON CACHE BOOL "" FORCE) # Required to prevent link
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/fetchcontent/assimp-src" "${CMAKE_CURRENT_BINARY_DIR}/_deps/assimp-build")
 set(ASSIMP_INCLUDE_DIR "${assimp_SOURCE_DIR}/include" "${assimp_BINARY_DIR}/include" "${assimp_SOURCE_DIR}/code")
 SET(CMAKE_DEBUG_POSTFIX "" CACHE STRING "" FORCE)
+
+
+FetchContent_Declare(
+    fmt
+    GIT_REPOSITORY https://github.com/fmtlib/fmt
+    GIT_TAG 40626af88bd7df9a5fb80be7b25ac85b122d6c21 #11.2.0
+    BINARY_DIR  "${CMAKE_CURRENT_BINARY_DIR}/_deps/fmt-build"
+    SUBBUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/_deps/fmt-subbuild"
+    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/fetchcontent/fmt-src"
+)
+if (NOT fmt_POPULATED)
+    FetchContent_Populate(fmt)
+endif (NOT fmt_POPULATED)
+add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
