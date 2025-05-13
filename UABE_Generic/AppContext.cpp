@@ -384,7 +384,7 @@ std::shared_ptr<ITask> AppContext::CreateBundleEntryOpenTask(std::shared_ptr<Bun
 			// -> Note: BundleFileContextInfo::onDirectoryReady handles BundleEntryModifierByResources replacer entries
 			//          by creating a bundle directory entry with an empty reader
 			//          and then adding a new subFile entry to modificationsToApply with the same replacer.
-			//TODO: Put some faster name lookup table in the BundleFileContextInfo (running this loop for every bundle entry -> O(N²) time).
+			//TODO: Put some faster name lookup table in the BundleFileContextInfo (running this loop for every bundle entry -> O(N? time).
 			for (size_t _i = pBundleContextInfo->modificationsToApply->subFiles.size(); _i > 0; --_i)
 			{
 				size_t i = _i - 1;
