@@ -10,6 +10,7 @@ cd out
 # 配置项目，生成VS解决方案
 cmake .. -G "Visual Studio 17 2022" -A x64
 
+cmake --build . --config Debug
 
 # Asset Bundle Extractor
 .assets and AssetBundle editor.  
