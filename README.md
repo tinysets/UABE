@@ -8,11 +8,17 @@ cd build
 mkdir out
 cd out
 
-
 # 配置项目，生成VS解决方案
 cmake .. -G "Visual Studio 17 2022" -A x64
 
 cmake --build . --config Debug
+
+# 打开VS
+# 关闭VS自动构建：
+# VS菜单→工具→选项→CMake→常规
+# 取消勾选"自动生成CMake缓存"
+
+# 然后就可以打开工程了 out/AssetBundleExtractor.sln
 
 # Asset Bundle Extractor
 .assets and AssetBundle editor.  
