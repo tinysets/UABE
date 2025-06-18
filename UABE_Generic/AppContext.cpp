@@ -815,6 +815,21 @@ bool AppContext::LoadClassDatabasePackage(const std::string &appBaseDir, std::st
 		std::string targetDir = appBaseDir + "classdata.tpk";
 		pDatabaseFileReader = Create_AssetsReaderFromFile(targetDir.c_str(), true, RWOpenFlags_Immediately);
 	}
+	if (pDatabaseFileReader == NULL)
+	{
+		std::string targetDir = appBaseDir + "/classdata.tpk";
+		pDatabaseFileReader = Create_AssetsReaderFromFile(targetDir.c_str(), true, RWOpenFlags_Immediately);
+	}
+	if (pDatabaseFileReader == NULL)
+	{
+		std::string targetDir = appBaseDir + "../classdata.tpk";
+		pDatabaseFileReader = Create_AssetsReaderFromFile(targetDir.c_str(), true, RWOpenFlags_Immediately);
+	}
+	if (pDatabaseFileReader == NULL)
+	{
+		std::string targetDir = appBaseDir + "/../classdata.tpk";
+		pDatabaseFileReader = Create_AssetsReaderFromFile(targetDir.c_str(), true, RWOpenFlags_Immediately);
+	}
 	if (pDatabaseFileReader != NULL)
 	{
 		if (!classPackage.Read(pDatabaseFileReader))
