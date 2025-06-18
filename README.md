@@ -1,3 +1,5 @@
+# 要是构建失败就多试几次 git的网络问题
+
 # 创建构建目录
 mkdir build
 cd build
