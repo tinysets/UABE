@@ -8,3 +8,5 @@
 /TypeTreeGenerator/.vs
 /TypeTreeGenerator/out
 /Tools/TypeTreeGenerator.pdb
+/build/
+/.vs/

@@ -1,3 +1,16 @@
+# 创建构建目录
+mkdir build
+cd build
+
+# 创建构建目录
+mkdir out
+cd out
+
+
+# 配置项目，生成VS解决方案
+cmake .. -G "Visual Studio 17 2022" -A x64
+
+
 # Asset Bundle Extractor
 .assets and AssetBundle editor.  
 Not affiliated with Unity Technologies.
