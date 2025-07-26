@@ -1696,6 +1696,30 @@ void MainWindow2::onOpenFileCommand()
 		for (size_t i = 0; i < filePaths.size(); i++)
 		{
 			std::string pathString(filePaths[i]);
+
+
+			{
+				std::string actualPath = pathString;
+				std::shared_ptr<IAssetsReader> pReader;
+				pReader = std::shared_ptr<IAssetsReader>(
+					Create_AssetsReaderFromFile(actualPath.c_str(), true, RWOpenFlags_Immediately),
+					Free_AssetsReader);
+				AssetBundleFile bundle;
+				bundle.Read(pReader.get(), nullptr, true);
+				auto directoryCount = bundle.bundleInf6->directoryCount;
+				for (size_t i = 0; i < directoryCount; i++)
+				{
+					auto dirInf = bundle.bundleInf6->dirInf[i];
+					auto name = dirInf.name;
+					auto dirReader = std::shared_ptr<IAssetsReader>(bundle.MakeAssetsFileReader(pReader.get(), &bundle.bundleInf6->dirInf[i]), FreeAssetBundle_FileReader);
+					AssetsFile* pAssetsFile = new AssetsFile(dirReader.get());
+					pAssetsFile->VerifyAssetsFile();
+					AssetsFileTable* pAssetsFileTable = new AssetsFileTable(pAssetsFile);
+					pAssetsFileTable->GenerateQuickLookupTree();
+				}
+			}
+
+
 			std::shared_ptr<ITask> pTask = this->pContext->CreateFileOpenTask(pathString);
 			if (!pTask)
 				MessageBox(this->hDlg, TEXT("Failed to open the file."), TEXT("UABE"), 16);
