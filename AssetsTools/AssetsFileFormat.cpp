@@ -1844,12 +1844,41 @@ WriteAssetsFile_Step3:
 		Free_AssetsWriter(pWriter);
 	return newHeader.fileSize + headerPos + filePosOffset;
 }
+
+#include <fstream>
+#include <vector>
+void saveBytes(const char* filename, const char* data, size_t size) {
+	std::ofstream file(filename, std::ios::binary);
+	if (file) {
+		file.write(data, size);
+	}
+}
+
 ASSETSTOOLS_API AssetsFile::AssetsFile(IAssetsReader *pReader)
 {
 	pReader->Seek(AssetsSeek_Begin, 0);
 	this->pReader = pReader;
 	QWORD filePos;
 	filePos = this->header.Read(0, pReader);
+	
+
+	{
+		// this->header is SerializedFileHeader
+		// [header][metadata[...]][data]
+		int metadataOffset = 20; // sizeof header;
+		int metadataSize = header.metadataSize;
+		int m_FileEndianess = header.endianness;
+		int dataOffset = header.offs_firstFile;
+		int dataSize = header.fileSize - header.offs_firstFile;
+		int dataEnd = dataOffset + dataSize;
+		//auto data = std::vector<uint8_t>();
+		//data.resize(metadataSize);
+		//pReader->Read(metadataSize, data.data());
+		//saveBytes("D:/google_drive/workdoc/PW-client/CODM/LUJ_ATMSPKF$FLTZARPKCMUKDMLR@9.metadata.bin", (char*)data.data(), data.size());
+	}
+
+
+	pReader->Seek(AssetsSeek_Begin, filePos);
 	//simple validity check
 	if (!this->header.format || this->header.format > 0x40)
 		goto AssetsFile_Break_InvalidFile;
