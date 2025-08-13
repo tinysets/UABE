@@ -7,7 +7,7 @@
 #include <list>
 #include <unordered_map>
 #include <algorithm>
-
+bool _iscodm = false;
 ASSETSTOOLS_API uint32_t AssetFileInfo::GetSize(uint32_t version)
 {
 	if (version >= 0x16)
@@ -833,6 +833,8 @@ ASSETSTOOLS_API QWORD TypeTree::Read(QWORD absFilePos, IAssetsReader *pReader, u
 	{
 		pReader->Read(curFilePos, 1, &hasTypeTree); curFilePos++;
 	}
+	if (_iscodm)
+		curFilePos += 4; // 不知道是啥 for codm
 	pReader->Read(curFilePos, 4, &this->fieldCount); curFilePos += 4;
 	if (bigEndian)
 		SwapEndians_(this->fieldCount);
@@ -1904,8 +1906,81 @@ ASSETSTOOLS_API AssetsFile::AssetsFile(IAssetsReader *pReader)
 
 		if (this->header.format >= 0x0E && (this->AssetCount > 0))
 			filePos = ((filePos + 3) & (~0x3));
-		filePos += tmpFileList.GetSizeBytes(this->header.format);
+		if (!_iscodm)
+			filePos += tmpFileList.GetSizeBytes(this->header.format); // codm 要关闭这个判断，否则会导致格式错误
+
+		if(_iscodm){
+			int objectCount = this->AssetCount;
+			for (int i = 0; i < objectCount; i++)
+			{
+				uint64_t fileID64;
+				uint32_t fileID32;
+				uint32_t byteStart;
+				uint32_t byteSize;
+				uint32_t typeID;
+				pReader->Read(filePos, 8, &fileID64); filePos += 8;
+				pReader->Read(filePos, 4, &fileID32); filePos += 4;
+				pReader->Read(filePos, 4, &byteStart); filePos += 4;
+				pReader->Read(filePos, 4, &byteSize); filePos += 4;
+				pReader->Read(filePos, 4, &typeID); filePos += 4;
+				/*SwapEndians_(fileID64);
+				SwapEndians_(fileID32);
+				SwapEndians_(byteStart);
+				SwapEndians_(byteSize);
+				SwapEndians_(typeID);*/
+				int a = 0;
+			}
+
+			int scriptTypeCount = 0;
+			pReader->Read(filePos, 4, &scriptTypeCount); filePos += 4;
+			for (int i = 0; i < scriptTypeCount; i++)
+			{
+				uint32_t localSerializedFileIndex;
+				uint64_t localIdentifierInFile;
+				pReader->Read(filePos, 4, &localSerializedFileIndex); filePos += 4;
+				pReader->Read(filePos, 8, &localIdentifierInFile); filePos += 8;
+				int a = 0;
+			}
+
+
+			int externalsCount = 0;
+			pReader->Read(filePos, 4, &externalsCount); filePos += 4;
+			for (int i = 0; i < externalsCount; i++)
+			{
+				// skip tempstring
+				uint8_t temp_char = 0;
+				do
+				{
+					pReader->Read(filePos, 1, &temp_char); filePos += 1;
+				} while (temp_char!=0);
+				for (int g = 0; g < 4; g++)
+				{
+					uint32_t guid_data = 0;
+					pReader->Read(filePos, 4, &guid_data); filePos += 4;
+				}
+				uint32_t type;
+				pReader->Read(filePos, 4, &type); filePos += 4;
+				char pathname[512];
+				int str_index = 0;
+				do
+				{
+					pReader->Read(filePos, 1, &temp_char); filePos += 1;
+					pathname[str_index] = temp_char;
+					str_index++;
+				} while (temp_char != 0);
+				int a = 0;
+			}
+
+			// skip userInformation string
+			uint8_t temp_char = 0;
+			do
+			{
+				pReader->Read(filePos, 1, &temp_char); filePos += 1;
+			} while (temp_char != 0);
+			// 至此 codm metadata 解析完成
+		}
 	}
+
 	if (this->header.format >= 0x0B)
 	{
 		filePos = this->preloadTable.Read(filePos, pReader, this->header.format, this->header.endianness == 1);
