@@ -1698,7 +1698,20 @@ void MainWindow2::onOpenFileCommand()
 			std::string pathString(filePaths[i]);
 
 
-			{
+			/*{
+				std::string actualPath = "D:/google_drive/workdoc/PW-client/CODM/LUJ_ATMSPKF$FLTZARPKCMUKDMLR@9.firstfile";
+				std::shared_ptr<IAssetsReader> pReader;
+				pReader = std::shared_ptr<IAssetsReader>(
+					Create_AssetsReaderFromFile(actualPath.c_str(), true, RWOpenFlags_Immediately),
+					Free_AssetsReader);
+				size_t filesize = 4096;
+				std::unique_ptr<uint8_t[]> bundleBuf(new uint8_t[(size_t)filesize]);
+				uint64_t length = pReader->Read(0, filesize, bundleBuf.get(), false);
+				AssetBundleAsset assetBundleFile;
+				size_t filePos = 0;
+				assetBundleFile.ReadBundleFile(bundleBuf.get(), (size_t)filesize, &filePos, 17, false);
+			}*/
+			/*{
 				std::string actualPath = pathString;
 				std::shared_ptr<IAssetsReader> pReader;
 				pReader = std::shared_ptr<IAssetsReader>(
@@ -1717,7 +1730,7 @@ void MainWindow2::onOpenFileCommand()
 					AssetsFileTable* pAssetsFileTable = new AssetsFileTable(pAssetsFile);
 					pAssetsFileTable->GenerateQuickLookupTree();
 				}
-			}
+			}*/
 
 
 			std::shared_ptr<ITask> pTask = this->pContext->CreateFileOpenTask(pathString);

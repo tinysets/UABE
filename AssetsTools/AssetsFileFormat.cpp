@@ -1877,6 +1877,7 @@ ASSETSTOOLS_API AssetsFile::AssetsFile(IAssetsReader *pReader)
 		//data.resize(metadataSize);
 		//pReader->Read(metadataSize, data.data());
 		//saveBytes("D:/google_drive/workdoc/PW-client/CODM/LUJ_ATMSPKF$FLTZARPKCMUKDMLR@9.metadata.bin", (char*)data.data(), data.size());
+		int a = 0;
 	}
 
 
